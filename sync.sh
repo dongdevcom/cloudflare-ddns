@@ -31,7 +31,7 @@ a_record_update() {
 		dns_add_record=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$cloudflare_zone_id/dns_records/" \
 			-H "Authorization: Bearer $cloudflare_api_token" \
 			-H "Content-Type: application/json" \
-			--data "{\"type\":\"A\",\"name\":\"$(echo "$cloudflare_record_name" | awk -F\. '{print $(NF-2)}')\",\"content\":\"$ipv4\",\"ttl\":1,\"proxied\":false}")
+			--data "{\"type\":\"A\",\"name\":\"$(echo "$cloudflare_record_name" | awk -F. '{OFS="."; NF-=2; print}')\",\"content\":\"$ipv4\",\"ttl\":1,\"proxied\":false}")
 		if echo "$dns_add_record" | grep -q '"success":true'; then
 			log "Create A record ${cloudflare_record_name}!"
 		fi
@@ -67,7 +67,7 @@ aaaa_record_update() {
 		dns_add_record=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$cloudflare_zone_id/dns_records/" \
 			-H "Authorization: Bearer $cloudflare_api_token" \
 			-H "Content-Type: application/json" \
-			--data "{\"type\":\"AAAA\",\"name\":\"$(echo "$cloudflare_record_name" | awk -F\. '{print $(NF-2)}')\",\"content\":\"$ipv6\",\"ttl\":1,\"proxied\":false}")
+			--data "{\"type\":\"AAAA\",\"name\":\"$(echo "$cloudflare_record_name" | awk -F. '{OFS="."; NF-=2; print}')\",\"content\":\"$ipv6\",\"ttl\":1,\"proxied\":false}")
 		if echo "$dns_add_record" | grep -q '"success":true'; then
 			log "Create AAAA record ${cloudflare_record_name}!"
 		fi
